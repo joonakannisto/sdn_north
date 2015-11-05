@@ -3,7 +3,7 @@ import json
 import requests
 #add_header(key, val)
 logindata='{"login":{"user":"sdn","password":"skyline","domain":"sdn"}}'
-headers = {'Content-Type': 'application/json'}
+headers = "{'Content-Type': 'application/json'}"
 req = requests.post('https://130.230.115.203:8443/sdn/v2.0/auth', headers=headers, data=json.dumps(logindata), verify='sdncertti')
 
 print req
