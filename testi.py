@@ -5,6 +5,6 @@ import requests
 logindata={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
 headers = {'Content-Type': 'application/json'}
 req = requests.post('https://130.230.115.203:8443/sdn/v2.0/auth', headers=headers, data=json.dumps(logindata), verify='sdncertti')
-#'sdncertti')
-
-print req.text
+# make an exectpion if not 200 ok
+req.raise_for_status()
+authtoken = json.load(req.text)
