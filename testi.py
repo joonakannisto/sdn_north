@@ -16,3 +16,4 @@ def get_token(logindata):
 
 login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
 token = get_token(login)
+print token
