@@ -25,4 +25,7 @@ token = get_token(login)
 print token
 # Now use the token inside a X-Auth:
 datapaths = get_datapaths(token)
-print datapaths
+
+dpidt=json.loads(datapaths)
+print dpidt["datapaths"][0]
+#print datapaths
