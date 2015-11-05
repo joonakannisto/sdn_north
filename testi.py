@@ -7,4 +7,4 @@ headers = {'Content-Type': 'application/json'}
 req = requests.post('https://130.230.115.203:8443/sdn/v2.0/auth', headers=headers, data=json.dumps(logindata), verify='sdncertti')
 #'sdncertti')
 
-print req
+print req.text
