@@ -9,3 +9,4 @@ req = requests.post('https://130.230.115.203:8443/sdn/v2.0/auth', headers=header
 req.raise_for_status()
 # it loads json from the string
 authtoken = json.loads(req.text)
+print authtoken
