@@ -23,7 +23,7 @@ def get_datapaths(token):
     # get rid of completely useless outer key
     for dpen in dpidt["datapaths"]
         retarr.append(dpen["dpid"])
-    return retarr
+    return req.text
 
 #GET /sdn/v2.0/of/datapaths/{dpid}/flows
 def get_flows(dpid,token):
@@ -35,5 +35,8 @@ def get_flows(dpid,token):
 token = get_token(login)
 # Now use the token inside a X-Auth:
 datapathids = get_datapaths(token)
+print datapathids
+for dpen in dpidt["datapaths"]
+    print dpen["dpid"]
 flows = get_flows(datapathids,token)
 print flows
