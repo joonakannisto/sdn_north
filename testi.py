@@ -45,8 +45,9 @@ def dpid_from_ip(ip,devices_list):
     if 'nodes' not in devices_list:
         raise ValueError("Not a nodes list")
     if 'ip' not in devices_list["nodes"][0]:
-        raise ValueError("No data for any target")
+        raise ValueError("No valid data for any target")
     for node in devices_list["nodes"]:
+        print node["ip"]
         if (node["ip"] == ip ):
             return node["dpid"]
     return ""
