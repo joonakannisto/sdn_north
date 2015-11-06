@@ -25,7 +25,7 @@ def get_datapaths(token):
         retarr.append(dpen["dpid"])
     return retarr
 
-# Turha, devices tarkoittaa kytkimiä
+# Turha, devices tarkoittaa kytkim
 def get_devices(token):
     headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
     req = requests.get(host+'/sdn/v2.0/net/devices', headers=headers, verify='sdncertti')
