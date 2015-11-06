@@ -33,7 +33,7 @@ def get_flows(dpid,token):
     return req.text
 
 token = get_token(login)
-# Now use the token inside a X-Auth: 
+# Now use the token inside a X-Auth:
 datapathids = get_datapaths(token)
-flows = get_flows(datapathids[0],token)
-print flows
+for dpid in datapathids
+    print get_flows(dpid,token)
