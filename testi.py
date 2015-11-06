@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import json
 import requests
 login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
@@ -25,10 +26,10 @@ def get_datapaths(token):
         retarr.append(dpen["dpid"])
     return retarr
 
-# Turha, devices tarkoittaa kytkim
-def get_devices(token):
+# T
+def get_nodes(token):
     headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
-    req = requests.get(host+'/sdn/v2.0/net/devices', headers=headers, verify='sdncertti')
+    req = requests.get(host+'/sdn/v2.0/net/nodes', headers=headers, verify='sdncertti')
     req.raise_for_status()
     return req.text
 
