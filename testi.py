@@ -19,7 +19,7 @@ def get_datapaths(token):
     req =requests.get(host+'/sdn/v2.0/of/datapaths', headers=headers, verify='sdncertti')
     req.raise_for_status()
     dpidt=json.loads(req.text)
-    retarr
+    retarr = []
     # get rid of completely useless outer key
     for dpen in dpidt["datapaths"]:
         retarr.append(dpen["dpid"])
