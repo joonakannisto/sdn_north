@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import json
 import requests
-
+login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
+host = "130.230.115.203:8443"
 
 def get_token(logindata):
     headers = {'Content-Type': 'application/json'}
-    req = requests.post('https://130.230.115.203:8443/sdn/v2.0/auth', headers=headers, data=json.dumps(logindata), verify='sdncertti')
+    req = requests.post(host+'/sdn/v2.0/auth', headers=headers, data=json.dumps(logindata), verify='sdncertti')
     # make an exectpion if not 200 ok
     req.raise_for_status()
     # it loads the json from the string
@@ -15,17 +16,24 @@ def get_token(logindata):
 
 def get_datapaths(token):
     headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
-    req =requests.get('https://130.230.115.203:8443/sdn/v2.0/of/datapaths', headers=headers, verify='sdncertti')
-    # make an exectpion if not 200 ok
+    req =requests.get(host+'/sdn/v2.0/of/datapaths', headers=headers, verify='sdncertti')
+    req.raise_for_status()
+    dpidt=json.loads(req.text)
+    retarr[]
+    # get rid of completely useless outer key
+    for dpen in dpidt["datapaths"]
+        retarr.append(dpen["dpid"])
+    return retarr
+
+#GET /sdn/v2.0/of/datapaths/{dpid}/flows
+def get_flows(dpid,token):
+    headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
+    req = requests.get(host+'/sdn/v2.0/of/datapaths/'+dpid+'/flows', headers=headers, verify='sdncertti)
     req.raise_for_status()
     return req.text
 
-login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
 token = get_token(login)
-print token
 # Now use the token inside a X-Auth:
-datapaths = get_datapaths(token)
-
-dpidt=json.loads(datapaths)
-print dpidt["datapaths"][0]
-#print datapaths
+datapathids = get_datapaths(token)
+flows = get_flows(datapathids,token)
+print flows
