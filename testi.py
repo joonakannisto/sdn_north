@@ -21,7 +21,7 @@ def get_datapaths(token):
     dpidt=json.loads(req.text)
     retarr
     # get rid of completely useless outer key
-    for dpen in dpidt["datapaths"]
+    for dpen in dpidt["datapaths"]:
         retarr.append(dpen["dpid"])
     return retarr
 
