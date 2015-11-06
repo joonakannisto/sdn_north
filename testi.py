@@ -2,7 +2,7 @@
 import json
 import requests
 login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
-host = "130.230.115.203:8443"
+host = "https://130.230.115.203:8443"
 
 def get_token(logindata):
     headers = {'Content-Type': 'application/json'}
