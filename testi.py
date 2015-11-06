@@ -49,8 +49,7 @@ def dpid_from_ip(ip,devices_list):
     for node in devices_list["nodes"]:
         if (node["ip"] == ip ):
             return node["dpid"]
-        else :
-            return ""
+    return ""
 
 
 token = get_token(login)
