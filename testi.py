@@ -25,6 +25,7 @@ def get_datapaths(token):
         retarr.append(dpen["dpid"])
     return retarr
 
+# Turha, devices tarkoittaa kytkimiä
 def get_devices(token):
     headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
     req = requests.get(host+'/sdn/v2.0/net/devices', headers=headers, verify='sdncertti')
@@ -42,7 +43,6 @@ def get_flows(dpid,token):
 token = get_token(login)
 # Now use the token inside a X-Auth:
 datapathids = get_datapaths(token)
-devices=get_devices(token)
-print json.dumps(json.loads(devices), indent=4, sort_keys=True)
-#for dpid in datapathids:
-#    print json.dumps(json.loads(get_flows(dpid,token)), indent=4, sort_keys=True)
+
+for dpid in datapathids:
+    print json.dumps(json.loads(get_flows(dpid,token)), indent=4, sort_keys=True)
