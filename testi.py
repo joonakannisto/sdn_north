@@ -27,7 +27,7 @@ def get_datapaths(token):
 
 def get_devices(token):
     headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
-    req = requests.get(host+'/sdn/v2.0/devices', headers=headers, verify='sdncertti')
+    req = requests.get(host+'/sdn/v2.0/net/devices', headers=headers, verify='sdncertti')
     req.raise_for_status()
     return req.text
 
