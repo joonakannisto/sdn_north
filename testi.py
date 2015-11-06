@@ -49,12 +49,15 @@ def dpid_from_ip(ip,devices_list)
     for node in devices_list["nodes"]:
         if (node["ip"] == ip ):
             return node["dpid"]
+        else :
+            return ""
 
 
 token = get_token(login)
 # Now use the token inside a X-Auth:
 #datapathids = get_datapaths(token)
 end_devices=get_nodes(token)
+print dpid_from_ip("130.230.115.225",end_devices)
 
 
 #for dpid in datapathids:
