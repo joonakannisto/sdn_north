@@ -57,6 +57,7 @@ token = get_token(login)
 # Now use the token inside a X-Auth:
 #datapathids = get_datapaths(token)
 end_devices=get_nodes(token)
+print end_devices
 print dpid_from_ip("130.230.115.225",end_devices)
 
 
