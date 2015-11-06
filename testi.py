@@ -40,7 +40,7 @@ def get_flows(dpid,token):
     req.raise_for_status()
     return req.text
 
-def dpid_from_ip(ip,devices_list)
+def dpid_from_ip(ip,devices_list):
     devices_list=json.loads(devices_list)
     if 'nodes' not in devices_list:
         raise ValueError("Not a nodes list")
