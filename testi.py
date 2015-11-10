@@ -56,6 +56,11 @@ def dpid_from_ip(ip,token):
             return node["dpid"]
     return ""
 
+def get_forward_path(src_dpid,dst_dpid,token):
+    headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
+    req = requests.get(host+'/sdn/v2.0/net/paths/forward?src_dpid='+src_dpid+'&dst_dpid='+dst_dpid+'', headers=headers, verify='sdncertti')
+    req.raise_for_status()
+    return req.text
 
 token = get_token(login)
 # Now use the token inside a X-Auth:
@@ -67,6 +72,8 @@ target_dpi=dpid_from_ip(kohde,token)
 flowit=get_flows(target_dpi,token)
 print flowit
 
+polku=get_forward_path(target_dpi,monitor_dpid,token)
+print polku
 # dpid
 
 #for dpid in datapathids:
