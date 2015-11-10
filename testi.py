@@ -56,6 +56,7 @@ def dpid_from_ip(ip,token):
             return node["dpid"]
     return ""
 
+
 def find_inport(flowit,ip):
     flowsj = json.loads(flowit)
     for flowentry in flowjs["flows"]:
@@ -65,6 +66,14 @@ def find_inport(flowit,ip):
                     for port_rule in flowentry["match"]
                         if 'port' in port_rule:
                             return port_rule["port"]
+
+def get_forward_path(src_dpid,dst_dpid,token):
+    headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
+    req = requests.get(host+'/sdn/v2.0/net/paths/forward?src_dpid='+src_dpid+'&dst_dpid='+dst_dpid+'', headers=headers, verify='sdncertti')
+    req.raise_for_status()
+    return req.text
+
+
 token = get_token(login)
 # Now use the token inside a X-Auth:
 #datapathids = get_datapaths(token)
@@ -75,9 +84,13 @@ target_dpi=dpid_from_ip(kohde,token)
 flowit=get_flows(target_dpi,token)
 print flowit
 
-original_outport =
 
-# dpid
+#original_outport =
+
+
+polku=get_forward_path(target_dpi,monitor_dpid,token)
+print polku
+
 
 #for dpid in datapathids:
 #    print json.dumps(json.loads(get_flows(dpid,token)), indent=4, sort_keys=True)
