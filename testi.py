@@ -4,7 +4,7 @@ import json
 import requests
 login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
 host = "https://130.230.115.203:8443"
-kohde= "130.230.115.225"
+kohde= "130.230.115.233"
 def get_token(logindata):
     headers = {'Content-Type': 'application/json'}
     req = requests.post(host+'/sdn/v2.0/auth', headers=headers, data=json.dumps(logindata), verify='sdncertti')
