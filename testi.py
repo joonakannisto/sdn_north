@@ -36,7 +36,7 @@ def get_nodes(token):
 #GET /sdn/v2.0/of/datapaths/{dpid}/flows
 def get_flows(dpid,token):
     headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
-    req = requests.get(host+'/sdn/v2.0/of/datapaths/'+dpid+'/flows', params=params, headers=headers, verify='sdncertti')
+    req = requests.get(host+'/sdn/v2.0/of/datapaths/'+dpid+'/flows', headers=headers, verify='sdncertti')
     req.raise_for_status()
     return req.text
 
