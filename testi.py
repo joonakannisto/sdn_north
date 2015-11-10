@@ -42,7 +42,7 @@ def get_flows(dpid,token):
 
 def dpid_from_ip(ip,token):
     end_devices=get_nodes(token)
-    devices_list=json.loads(devices_list)
+    devices_list=json.loads(end_devices)
     if 'nodes' not in devices_list:
         raise ValueError("Not a nodes list")
     if 'ip' not in devices_list["nodes"][0]:
