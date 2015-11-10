@@ -90,7 +90,29 @@ print flowit
 
 polku=get_forward_path(target_dpi,monitor_dpid,token)
 print polku
-
+forward_path=json.loads(polku)
+# Aseta flowt, eli korvaa alkuperäinen kohdeportti forward path ekalla ja toisessa
+# dpid:ssä aseta sisääntuleva liikenne portissa x
+template ="""{
+        "flow": {
+                "cookie": "0x2031987",
+                "table_id": 0,
+                "priority": 30000,
+                "idle_timeout": 300,
+                "hard_timeout": 300,
+                "match": [
+                        {"ipv4_src": "10.10.2.1"},
+                        {"eth_type": "ipv4"}
+                ],
+                "instructions": [{"apply_actions": [{"output": 2}]}]
+        }
+}"""
+flowtemp=json.loads(template)
+for rule in flowtemp["flow"]["match"]:
+    if "ipv4_src" in rule:
+        rule["ipv4_src"]=ip
+newinstruction = json.loads('{"apply_actions": [{"push_vlan":42}{"output": 23}]}')
+flowtemp["flow"]["instructions"].append(newinstruction)
 
 #for dpid in datapathids:
 #    print json.dumps(json.loads(get_flows(dpid,token)), indent=4, sort_keys=True)
