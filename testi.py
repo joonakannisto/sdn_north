@@ -5,7 +5,7 @@ import requests
 login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
 host = "https://130.230.115.203:8443"
 kohde= "130.230.115.233"
-monitor_dpid=""
+monitor_dpid="00:02:3c:a8:2a:47:d9:80"
 monitor_port ="23"
 
 
