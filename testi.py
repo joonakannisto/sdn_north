@@ -5,6 +5,10 @@ import requests
 login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
 host = "https://130.230.115.203:8443"
 kohde= "130.230.115.233"
+monitor_dpid=""
+monitor_port ="23"
+
+
 def get_token(logindata):
     headers = {'Content-Type': 'application/json'}
     req = requests.post(host+'/sdn/v2.0/auth', headers=headers, data=json.dumps(logindata), verify='sdncertti')
@@ -62,6 +66,8 @@ end_devices=get_nodes(token)
 target_dpi=dpid_from_ip(kohde,token)
 flowit=get_flows(target_dpi,token)
 print flowit
+
+# dpid
 
 #for dpid in datapathids:
 #    print json.dumps(json.loads(get_flows(dpid,token)), indent=4, sort_keys=True)
