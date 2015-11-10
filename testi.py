@@ -4,7 +4,7 @@ import json
 import requests
 login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
 host = "https://130.230.115.203:8443"
-
+kohde= "130.230.115.225"
 def get_token(logindata):
     headers = {'Content-Type': 'application/json'}
     req = requests.post(host+'/sdn/v2.0/auth', headers=headers, data=json.dumps(logindata), verify='sdncertti')
@@ -40,14 +40,14 @@ def get_flows(dpid,token):
     req.raise_for_status()
     return req.text
 
-def dpid_from_ip(ip,devices_list):
+def dpid_from_ip(ip,token):
+    end_devices=get_nodes(token)
     devices_list=json.loads(devices_list)
     if 'nodes' not in devices_list:
         raise ValueError("Not a nodes list")
     if 'ip' not in devices_list["nodes"][0]:
         raise ValueError("No valid data for any target")
     for node in devices_list["nodes"]:
-        print node["ip"]
         if (node["ip"] == ip ):
             return node["dpid"]
     return ""
@@ -56,10 +56,12 @@ def dpid_from_ip(ip,devices_list):
 token = get_token(login)
 # Now use the token inside a X-Auth:
 #datapathids = get_datapaths(token)
-end_devices=get_nodes(token)
-print end_devices
-print dpid_from_ip("130.230.115.225",end_devices)
 
+end_devices=get_nodes(token)
+#print end_devices
+target_dpi=dpid_from_ip(kohde,token)
+flowit=get_flows(target_dpi,token)
+print flowit
 
 #for dpid in datapathids:
 #    print json.dumps(json.loads(get_flows(dpid,token)), indent=4, sort_keys=True)
