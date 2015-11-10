@@ -56,7 +56,15 @@ def dpid_from_ip(ip,token):
             return node["dpid"]
     return ""
 
-
+def find_inport(flowit,ip):
+    flowsj = json.loads(flowit)
+    for flowentry in flowjs["flows"]:
+        if 'match' in flowentry:
+            for rule in flowentry["match"]:
+                if(rule["ipv4_src"]==ip):
+                    for port_rule in flowentry["match"]
+                        if 'port' in port_rule:
+                            return port_rule["port"]
 token = get_token(login)
 # Now use the token inside a X-Auth:
 #datapathids = get_datapaths(token)
@@ -66,6 +74,8 @@ end_devices=get_nodes(token)
 target_dpi=dpid_from_ip(kohde,token)
 flowit=get_flows(target_dpi,token)
 print flowit
+
+original_outport =
 
 # dpid
 
