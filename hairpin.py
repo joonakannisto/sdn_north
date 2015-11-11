@@ -49,18 +49,18 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     #    firstaction[0]["output"]=target_port_in
     templateflow.append('apply_actions':firstaction)
     firstelement=True
-    previous=1
+    previous=find_inport(flowit,ip)
 
     for link in forward_path["path"]["links"]:
         loopflow = templateflow
         if not firstelement:
             loopflow["flow"]["match"].append{'eth_src': rewsrc}
-            loopflow["flow"]["match"].append{'port': previous}
+            loopflow["flow"]["match"].append{'inport': previous}
             loopaction={'output' : int(link["src_port"])}
             loopflow["flow"]["instructions"]["0"]'apply_actions':loopaction)
         else :
-            inport = find_inport(flowit,ip)
-            match = [{'ipv4_src' : ip }, {'inport' : inport}]
+
+            match = [{'ipv4_src' : ip }, {'inport' : previous}]
             loopflow["flow"]["match"]=match
             firstaction[1]={'output': int(link["src_port"])}
             loopflow["flow"]["instructions"]["0"]'apply_actions':firstaction)
@@ -85,7 +85,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     if (startdpid !=target_sw):
         forward_path=json.loads(get_forward_path(monitor_dpid,target_dpid,token))
     firstelement=True
-    # Not so stupid person would have done this for both directions at once
+    # In addition, not so stupid person would have done this for both directions at once
     for link in forward_path["path"]["links"]:
         loopflow = templateflow
         if not firstelement:
