@@ -51,7 +51,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     firstelement=True
     previous=1
 
-    for link in forwardpath["path"]["links"]:
+    for link in forward_path["path"]["links"]:
         loopflow = templateflow
         if not firstelement:
             loopflow["flow"]["match"].append{'eth_src': rewsrc}
@@ -74,19 +74,33 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
 
     needleflow["flow"]["match"].append{'eth_src': rewsrc}
     needleflow["flow"]["match"].append{'port': previous}
-    needleaction=[]
-    if not forwardpath["path"]["links"]:
-        needleaction.append({'set_field' : {'eth_src' : rewsrc}})
-    needleaction.append({'output' : target_port_in})
+
+    needleaction=[{'output' : target_port_in}]
     needleflow["flow"]["instructions"]["0"]'apply_actions':needleaction)
     addjsonflow(json.dumps(needleflow),target_sw,token)
-    needleflow["flow"]["match"][1]["port"]=target_port_out
-    needleaction=[{'output' : target_port_in}]
+
+
     # we could use reversed(forwardpath), but dunno, maybe is asymmetric
     forward_path = {'path':{'links' : []}}
     if (startdpid !=target_sw):
-        forward_path=json.loads(get_forward_path(target_dpid,monitor_dpid,token))
+        forward_path=json.loads(get_forward_path(monitor_dpid,target_dpid,token))
+    firstelement=True
+    # Not so stupid person would have done this for both directions at once
+    for link in forward_path["path"]["links"]:
+        loopflow = templateflow
+        if not firstelement:
+            loopflow["flow"]["match"].append{'eth_src': rewsrc}
+            loopflow["flow"]["match"].append{'port': previous}
+            loopaction={'output' : int(link["src_port"])}
+            loopflow["flow"]["instructions"]["0"]'apply_actions':loopaction)
+        else :
+            match = [{'eth_src' : rewsrc }, {'inport' : target_port_out}]
+            loopflow["flow"]["match"]=match
+            firstaction[1]={'output': int(link["src_port"])}
+            loopflow["flow"]["instructions"]["0"]'apply_actions':firstaction)
+            firstelement=False
 
+    loopflow["flow"]["match"][1]["port"]=target_port_out
         match[0]["inport"]=int(link["dst_port"])
         loopflow["instructions"][0]["apply_actions"]
     newaction[1]["output"] =int(forward_path["path"]["links"][0]["src_port"])
