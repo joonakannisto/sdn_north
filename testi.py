@@ -127,7 +127,7 @@ newinstruction["apply_actions"][1]["output"]=int(forward_path["path"]["links"][0
 flowtemp["flow"]["instructions"].append(newinstruction)
 
 print json.dumps(flowtemp, sort_keys=True,indent=4)
-#print addjsonflow(json.dumps(flowtemp),target_dpi,token)
+print addjsonflow(json.dumps(flowtemp),target_dpi,token)
 
 
 #for dpid in datapathids:
