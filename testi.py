@@ -126,7 +126,7 @@ flowtemp["flow"]["match"][0]["ipv4_src"]=kohde
 newinstruction = json.loads('{"apply_actions": [{"push_vlan":42},{"output": 23}]}')
 newinstruction["apply_actions"][0]["output"]=int(forward_path["path"]["links"][0]["dst_port"])
 flowtemp["flow"]["instructions"].append(newinstruction)
-addjsonflow(flowtemp,target_dpi,token)
+addjsonflow(json.dump(flowtemp),target_dpi,token)
 
 
 #for dpid in datapathids:
