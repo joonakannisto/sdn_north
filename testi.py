@@ -97,7 +97,7 @@ print polku
 forward_path=json.loads(polku)
 # Aseta flowt, eli korvaa alkuperäinen kohdeportti forward path ekalla ja toisessa
 # dpid:ssä aseta sisääntuleva liikenne portissa x
-oldflow[]
+oldflow=[]
 flowtemp=json.loads(flowit)
 for flowentry in flowtemp["flows"]:
     if 'match' in flowentry:
