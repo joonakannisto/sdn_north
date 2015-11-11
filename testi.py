@@ -8,6 +8,9 @@ kohde= "130.230.115.233"
 monitor_dpid="00:02:3c:a8:2a:47:d9:80"
 monitor_port ="23"
 
+def qheader(token):
+    return {'Content-Type': 'application/json', 'X-Auth-Token' : token}
+
 
 def get_token(logindata):
     headers = {'Content-Type': 'application/json'}
@@ -20,8 +23,8 @@ def get_token(logindata):
     return token
 
 def get_datapaths(token):
-    headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
-    req =requests.get(host+'/sdn/v2.0/of/datapaths', headers=headers, verify='sdncertti')
+
+    req =requests.get(host+'/sdn/v2.0/of/datapaths', headers=qheader(token), verify='sdncertti')
     req.raise_for_status()
     dpidt=json.loads(req.text)
     retarr = []
@@ -32,15 +35,13 @@ def get_datapaths(token):
 
 # T
 def get_nodes(token):
-    headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
-    req = requests.get(host+'/sdn/v2.0/net/nodes', headers=headers, verify='sdncertti')
+    req = requests.get(host+'/sdn/v2.0/net/nodes', headers=qheader(token), verify='sdncertti')
     req.raise_for_status()
     return req.text
 
 #GET /sdn/v2.0/of/datapaths/{dpid}/flows
 def get_flows(dpid,token):
-    headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
-    req = requests.get(host+'/sdn/v2.0/of/datapaths/'+dpid+'/flows', headers=headers, verify='sdncertti')
+    req = requests.get(host+'/sdn/v2.0/of/datapaths/'+dpid+'/flows', headers=qheader(token), verify='sdncertti')
     req.raise_for_status()
     return req.text
 
@@ -68,11 +69,14 @@ def find_inport(flowit,ip):
                             return port_rule["port"]
 
 def get_forward_path(src_dpid,dst_dpid,token):
-    headers = {'Content-Type': 'application/json', 'X-Auth-Token' : token}
-    req = requests.get(host+'/sdn/v2.0/net/paths/forward?src_dpid='+src_dpid+'&dst_dpid='+dst_dpid+'', headers=headers, verify='sdncertti')
+    req = requests.get(host+'/sdn/v2.0/net/paths/forward?src_dpid='+src_dpid+'&dst_dpid='+dst_dpid+'', headers=qheader(token), verify='sdncertti')
     req.raise_for_status()
     return req.text
 
+def addjsonflow(flow,dst_dpid,token):
+    req = requests.post(host+'/sdn/v2.0/of/datapaths/'+dst_dpid+'/flows', headers=qheader(token), data=flow, verify='sdncertti')
+    req.raise_for_status()
+    return req
 
 token = get_token(login)
 # Now use the token inside a X-Auth:
@@ -93,26 +97,37 @@ print polku
 forward_path=json.loads(polku)
 # Aseta flowt, eli korvaa alkuperäinen kohdeportti forward path ekalla ja toisessa
 # dpid:ssä aseta sisääntuleva liikenne portissa x
+
+flowtemp=json.loads(flowit)
+flowtemp=flowtemp["flows"]
+for flowentry in flowtemp["flows"]:
+    if 'match' in flowentry:
+        for rule in flowentry["match"]:
+            if(rule["ipv4_src"]==ip):
+                oldflow.append(flowentry)
+                break
+
 template ="""{
-        "flow": {
-                "cookie": "0x2031987",
-                "table_id": 0,
-                "priority": 30000,
-                "idle_timeout": 300,
-                "hard_timeout": 300,
-                "match": [
-                        {"ipv4_src": "10.10.2.1"},
-                        {"eth_type": "ipv4"}
-                ],
-                "instructions": [{"apply_actions": [{"output": 2}]}]
-        }
+"flow": {
+    "cookie": "0x2031987",
+    "table_id": 0,
+    "priority": 30000,
+    "idle_timeout": 300,
+    "hard_timeout": 300,
+    "match": [
+            {"ipv4_src": "10.10.2.1"},
+            {"eth_type": "ipv4"}
+    ],
+    "instructions": [{"apply_actions": [{"output": 2}]}]
+}
 }"""
-flowtemp=json.loads(template)
-for rule in flowtemp["flow"]["match"]:
-    if "ipv4_src" in rule:
-        rule["ipv4_src"]=ip
-newinstruction = json.loads('{"apply_actions": [{"push_vlan":42}{"output": 23}]}')
+flowtemp = json.loads(template)
+flowtemp["flow"]["match"][0]["ipv4_src"]=ip
+newinstruction = json.loads('{"apply_actions": [{"push_vlan":42},{"output": 23}]}')
+newinstruction["apply_actions"][0]["output"]=int(forward_path["path"]["links"][0]["dst_port"])
 flowtemp["flow"]["instructions"].append(newinstruction)
+addjsonflow(flowtemp,target_dpi,token)
+
 
 #for dpid in datapathids:
 #    print json.dumps(json.loads(get_flows(dpid,token)), indent=4, sort_keys=True)
