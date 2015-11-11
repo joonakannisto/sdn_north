@@ -102,7 +102,7 @@ flowtemp=json.loads(flowit)
 for flowentry in flowtemp["flows"]:
     if 'match' in flowentry:
         for rule in flowentry["match"]:
-            if(rule["ipv4_src"]==ip):
+            if(rule["ipv4_src"]==target):
                 oldflow.append(flowentry)
                 break
 
