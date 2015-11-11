@@ -41,8 +41,7 @@ def get_nodes(token):
 #GET /sdn/v2.0/of/datapaths/{dpid}/flows
 def get_flows(dpid,token):
     req = requests.get(host+'/sdn/v2.0/of/datapaths/'+dpid+'/flows', headers=qheader(token), verify='sdncertti')
-    print req.text
-    #req.raise_for_status()
+    req.raise_for_status()
     return req.text
 
 def dpid_from_ip(ip,token):
@@ -125,7 +124,7 @@ flowtemp["flow"]["match"][0]["ipv4_src"]=kohde
 rewsrc="66.66.66.66.66.66"
 newinstruction = json.loads('{"apply_actions": [{"set_field": {"eth_src":"'+rewsrc+'"}},{"output":23}]}')
 
-newinstruction["apply_actions"].append({"output", int(forward_path["path"]["links"][0]["src_port"])})
+newinstruction["apply_actions"].append({'output', int(forward_path["path"]["links"][0]["src_port"])})
 flowtemp["flow"]["instructions"][0]=newinstruction
 
 print json.dumps(flowtemp, sort_keys=True,indent=4)
