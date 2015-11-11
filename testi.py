@@ -125,7 +125,8 @@ flowtemp["flow"]["match"][0]["ipv4_src"]=kohde
 newinstruction = json.loads('{"apply_actions": [{"push_vlan":42},{"output": 23}]}')
 newinstruction["apply_actions"][1]["output"]=int(forward_path["path"]["links"][0]["src_port"])
 flowtemp["flow"]["instructions"].append(newinstruction)
-print json.dumps(flowtemp)
+
+print json.dumps(flowtemp, sort_keys=True,indent=4)
 #print addjsonflow(json.dumps(flowtemp),target_dpi,token)
 
 
