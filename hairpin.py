@@ -60,7 +60,7 @@ def hairpin(oldflow,forwardpath,ip,target_sw,target_port_in,target_port_out,rews
             loopflow["instructions"]["0"]'apply_actions':firstaction)
             firstelement=False
         addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
-        #lets save the 
+        #lets save the
         previous=int(link["dst_port"])
         match[0]["inport"]=int(link["dst_port"])
         loopflow["instructions"][0]["apply_actions"]
