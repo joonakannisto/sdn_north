@@ -122,7 +122,7 @@ template ="""{
 }
 }"""
 flowtemp = json.loads(template)
-flowtemp["flow"]["match"][0]["ipv4_src"]=ip
+flowtemp["flow"]["match"][0]["ipv4_src"]=target
 newinstruction = json.loads('{"apply_actions": [{"push_vlan":42},{"output": 23}]}')
 newinstruction["apply_actions"][0]["output"]=int(forward_path["path"]["links"][0]["dst_port"])
 flowtemp["flow"]["instructions"].append(newinstruction)
