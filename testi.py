@@ -124,7 +124,7 @@ flowtemp["flow"]["match"][0]["ipv4_src"]=kohde
 rewsrc="66.66.66.66.66.66"
 newinstruction = json.loads('{"apply_actions": [{"set_field": {"eth_src":"'+rewsrc+'"}},{"output":23},{"output":42}]}')
 
-newinstruction["apply_actions"][2]["output"]=int(forward_path["path"]["links"][0]["src_port"])})
+newinstruction["apply_actions"][2]["output"]=int(forward_path["path"]["links"][0]["src_port"])
 flowtemp["flow"]["instructions"][0]=newinstruction
 
 print json.dumps(flowtemp, sort_keys=True,indent=4)
