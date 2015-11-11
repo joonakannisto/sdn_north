@@ -56,6 +56,18 @@ def dpid_from_ip(ip,token):
             return node["dpid"]
     return ""
 
+def ether_from_ip(ip,token):
+    end_devices=get_nodes(token)
+    devices_list=json.loads(end_devices)
+    if 'nodes' not in devices_list:
+        raise ValueError("Not a nodes list")
+    if 'ip' not in devices_list["nodes"][0]:
+        raise ValueError("No valid data for any target")
+    for node in devices_list["nodes"]:
+        if (node["ip"] == ip ):
+            return node["mac"]
+
+
 
 def find_inport(flowit,ip):
     flowsj = json.loads(flowit)
@@ -66,6 +78,8 @@ def find_inport(flowit,ip):
                     for port_rule in flowentry["match"]:
                         if 'port' in port_rule:
                             return port_rule["port"]
+
+
 
 def get_forward_path(src_dpid,dst_dpid,token):
     req = requests.get(host+'/sdn/v2.0/net/paths/forward?src_dpid='+src_dpid+'&dst_dpid='+dst_dpid+'', headers=qheader(token), verify='sdncertti')
@@ -104,27 +118,23 @@ for flowentry in flowtemp["flows"]:
                 if(rule["ipv4_src"]==kohde):
                     oldflow.append(flowentry)
                     break
+postflow=[]
+rewsrc="66.66.66.66.66.66"
+origsrc
+for newflow in oldflow:
+    newaction = json.loads('{[{"set_field": {"eth_src":"'+rewsrc+'"}},{"output":23},{"output":42}]}')
+    newaction[1]["output"] =int(forward_path["path"]["links"][0]["src_port"])
+    if 'output' in newflow["instructions"][0]["apply_actions"][0]:
+        newaction[2]["output"] = newflow["instructions"][0]["apply_actions"][0]
+    # does not seem to support more than one action
+    newflow["instructions"][0]["apply_actions"]=newaction
 
-template ="""{
-"flow": {
-    "cookie": "0x2031987",
-    "table_id": 0,
-    "priority": 30000,
-    "idle_timeout": 300,
-    "hard_timeout": 300,
-    "match": [
-            {"ipv4_src": "10.10.2.1"},
-            {"eth_type": "ipv4"}
-    ],
-    "instructions": [{"apply_actions": [{"output": 2}]}]
-}
-}"""
 flowtemp = json.loads(template)
 flowtemp["flow"]["match"][0]["ipv4_src"]=kohde
-rewsrc="66.66.66.66.66.66"
+
 newinstruction = json.loads('{"apply_actions": [{"set_field": {"eth_src":"'+rewsrc+'"}},{"output":23},{"output":42}]}')
 
-newinstruction["apply_actions"][2]["output"]=int(forward_path["path"]["links"][0]["src_port"])
+
 flowtemp["flow"]["instructions"][0]=newinstruction
 
 print json.dumps(flowtemp, sort_keys=True,indent=4)
