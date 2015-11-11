@@ -102,9 +102,10 @@ flowtemp=json.loads(flowit)
 for flowentry in flowtemp["flows"]:
     if 'match' in flowentry:
         for rule in flowentry["match"]:
-            if(rule["ipv4_src"]==target):
-                oldflow.append(flowentry)
-                break
+            if 'ipv4_src' in rule:
+                if(rule["ipv4_src"]==target):
+                    oldflow.append(flowentry)
+                    break
 
 template ="""{
 "flow": {
