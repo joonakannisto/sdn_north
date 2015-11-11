@@ -99,7 +99,6 @@ forward_path=json.loads(polku)
 # dpid:ssä aseta sisääntuleva liikenne portissa x
 
 flowtemp=json.loads(flowit)
-flowtemp=flowtemp["flows"]
 for flowentry in flowtemp["flows"]:
     if 'match' in flowentry:
         for rule in flowentry["match"]:
