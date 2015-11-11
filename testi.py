@@ -23,7 +23,6 @@ def get_token(logindata):
     return token
 
 def get_datapaths(token):
-
     req =requests.get(host+'/sdn/v2.0/of/datapaths', headers=qheader(token), verify='sdncertti')
     req.raise_for_status()
     dpidt=json.loads(req.text)
@@ -42,7 +41,8 @@ def get_nodes(token):
 #GET /sdn/v2.0/of/datapaths/{dpid}/flows
 def get_flows(dpid,token):
     req = requests.get(host+'/sdn/v2.0/of/datapaths/'+dpid+'/flows', headers=qheader(token), verify='sdncertti')
-    req.raise_for_status()
+    print req.text
+    #req.raise_for_status()
     return req.text
 
 def dpid_from_ip(ip,token):
