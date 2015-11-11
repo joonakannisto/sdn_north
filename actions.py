@@ -72,7 +72,7 @@ def find_inport(flowit,ip):
                         if 'port' in port_rule:
                             return port_rule["port"]
 
-def flowsforip(flowit,ip)
+def flowsforip(flowit,ip):
 flowtemp=json.loads(flowit)
 oldflow=[]
 for flowentry in flowtemp["flows"]:

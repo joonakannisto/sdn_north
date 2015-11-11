@@ -57,13 +57,13 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
             loopflow["flow"]["match"].append{'eth_src': rewsrc}
             loopflow["flow"]["match"].append{'inport': previous}
             loopaction={'output' : int(link["src_port"])}
-            loopflow["flow"]["instructions"]["0"]'apply_actions':loopaction)
+            loopflow["flow"]["instructions"][0]["apply_actions"]=loopaction
         else :
             #could match here with ether, but what if many ip for one l2?
             match = [{'ipv4_src' : ip }, {'inport' : previous}]
             loopflow["flow"]["match"]=match
             firstaction[1]={'output': int(link["src_port"])}
-            loopflow["flow"]["instructions"]["0"]'apply_actions':firstaction)
+            loopflow["flow"]["instructions"][0]["apply_actions"]=firstaction
             firstelement=False
         addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
         #lets save the destination port in the next switch
@@ -89,16 +89,17 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     for link in forward_path["path"]["links"]:
         loopflow = templateflow
         if not firstelement:
-            loopflow["flow"]["match"].append{'eth_src': rewsrc}
-            loopflow["flow"]["match"].append{'port': previous}
-            loopaction={'output' : int(link["src_port"])}
-            loopflow["flow"]["instructions"]["0"]'apply_actions':loopaction)
+            match = [{'eth_src' : rewsrc }, {'inport' : previous}]
         else :
             match = [{'eth_src' : rewsrc }, {'inport' : target_port_out}]
-            loopflow["flow"]["match"]=match
-            firstaction[1]={'output': int(link["src_port"])}
-            loopflow["flow"]["instructions"]["0"]'apply_actions':firstaction)
             firstelement=False
+
+        loopflow["flow"]["match"]=match
+        loopaction={'output' : int(link["src_port"])}
+        loopflow["flow"]["instructions"][0]["apply_actions"]=loopaction
+        addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
+        # lets save the destination port in the next switch
+        previous=int(link["dst_port"])
 
     loopflow["flow"]["match"][1]["port"]=target_port_out
         match[0]["inport"]=int(link["dst_port"])
