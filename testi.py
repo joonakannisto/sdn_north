@@ -123,10 +123,10 @@ template ="""{
 flowtemp = json.loads(template)
 flowtemp["flow"]["match"][0]["ipv4_src"]=kohde
 rewsrc="66.66.66.66.66.66"
-newinstruction = json.loads('{"apply_actions": [{"set_field": {"eth_src":"'+rewsrc+'"}},{"output":'+forward_path["path"]["links"][0]["src_port"]+'}]}')
-print newinstruction
-#newinstruction["apply_actions"].append({"output", int(forward_path["path"]["links"][0]["src_port"])})
-flowtemp["flow"]["instructions"].append(newinstruction)
+newinstruction = json.loads('{"apply_actions": [{"set_field": {"eth_src":"'+rewsrc+'"}},{"output":23}]}')
+
+newinstruction["apply_actions"].append({"output", int(forward_path["path"]["links"][0]["src_port"])})
+flowtemp["flow"]["instructions"][0]=newinstruction
 
 print json.dumps(flowtemp, sort_keys=True,indent=4)
 print addjsonflow(json.dumps(flowtemp),target_dpi,token)
