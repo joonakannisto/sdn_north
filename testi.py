@@ -103,7 +103,7 @@ for flowentry in flowtemp["flows"]:
     if 'match' in flowentry:
         for rule in flowentry["match"]:
             if 'ipv4_src' in rule:
-                if(rule["ipv4_src"]==target):
+                if(rule["ipv4_src"]==kohde):
                     oldflow.append(flowentry)
                     break
 
@@ -122,7 +122,7 @@ template ="""{
 }
 }"""
 flowtemp = json.loads(template)
-flowtemp["flow"]["match"][0]["ipv4_src"]=target
+flowtemp["flow"]["match"][0]["ipv4_src"]=kohde
 newinstruction = json.loads('{"apply_actions": [{"push_vlan":42},{"output": 23}]}')
 newinstruction["apply_actions"][0]["output"]=int(forward_path["path"]["links"][0]["dst_port"])
 flowtemp["flow"]["instructions"].append(newinstruction)
