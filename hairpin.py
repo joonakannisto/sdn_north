@@ -103,10 +103,14 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     for flow in oldflow:
         flow["priority"]=30000
         flow["cookie"]="0x2342058"
-        del flow["duration_sec"]
-        del flow["duration_nsec"]
-        del flow["packet_count"]
-        del flow["flow_mod_flags"]
+        try:
+            del flow["duration_sec"]
+            del flow["duration_nsec"]
+            del flow["packet_count"]
+            del flow["flow_mod_flags"]
+        # don't give a f for errors :D 
+        except KeyError
+            pass
         loopflow={'flow': flow}
         addjsonflow(json.dumps(loopflow),startdpid,token)
 
