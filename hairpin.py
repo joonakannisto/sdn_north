@@ -90,7 +90,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
             firstelement=False
 
         loopflow["flow"]["match"]=match
-        loopaction={'output' : int(link["src_port"])}
+        loopaction=[{'output' : int(link["src_port"])}]
         loopflow["flow"]["instructions"][0]["apply_actions"]=loopaction
         print json.dumps(loopflow)
         actions.addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
