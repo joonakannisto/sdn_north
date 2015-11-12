@@ -92,6 +92,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         loopflow["flow"]["match"]=match
         loopaction={'output' : int(link["src_port"])}
         loopflow["flow"]["instructions"][0]["apply_actions"]=loopaction
+        print json.dumps(loopflow)
         actions.addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
         # lets save the destination port in the next switch
         previous=int(link["dst_port"])
