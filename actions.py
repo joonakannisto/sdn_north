@@ -51,7 +51,7 @@ def dpid_from_ip(ip,token):
     for node in devices_list["nodes"]:
         if (node["ip"] == ip ):
             return node["dpid"]
-    return ""
+    raise  NameError('IP '+ip+' not in end devices'+end_devices)
 
 def ether_from_ip(ip,token):
     end_devices=get_nodes(token)
