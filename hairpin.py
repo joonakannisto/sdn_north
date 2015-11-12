@@ -44,7 +44,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     templateflow=json.loads(template)
     templateflow["flow"]["instructions"].append({'apply_actions':firstaction})
     firstelement=True
-    previous=actions.find_inport(flowit,ip)
+    previous=actions.better_inport(ip,token)
     firstport=previous
     for link in forward_path["path"]["links"]:
         loopflow = templateflow
@@ -60,7 +60,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
             firstaction[1]={'output': int(link["src_port"])}
             loopflow["flow"]["instructions"][0]["apply_actions"]=firstaction
             firstelement=False
-        print json.dumps(loopflow)+link["src_dpid"]    
+        print json.dumps(loopflow)+link["src_dpid"]
         actions.addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
         #lets save the destination port in the next switch
         previous=int(link["dst_port"])

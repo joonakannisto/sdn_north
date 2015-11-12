@@ -64,6 +64,17 @@ def ether_from_ip(ip,token):
         if (node["ip"] == ip ):
             return node["mac"]
 
+def better_inport(ip, token):
+    end_devices=get_nodes(token)
+    devices_list=json.loads(end_devices)
+    if 'nodes' not in devices_list:
+        raise ValueError("Not a nodes list")
+    if 'ip' not in devices_list["nodes"][0]:
+        raise ValueError("No valid data for any target")
+    for node in devices_list["nodes"]:
+        if (node["ip"] == ip ):
+            return node["port"]
+    return ""
 
 def find_inport(flowit,ip):
     flowsj = json.loads(flowit)
