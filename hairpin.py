@@ -16,9 +16,6 @@ token = actions.get_token(login)
 # dpid:ssä aseta sisääntuleva liikenne portissa x
 
 
-uusmac="66:66:66:66:66:66"
-
-hairpin(kohde,monitor_dpid,monitor_port,15,uusmac,token)
 
 def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     template ="""{"flow": {
@@ -126,6 +123,9 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         actions.addjsonflow(json.dumps(loopflow),startdpid,token)
 
     # does not seem to support more than one action
+uusmac="66:66:66:66:66:66"
+
+hairpin(kohde,monitor_dpid,monitor_port,15,uusmac,token)
 
 #print addjsonflow(json.dumps(flowtemp),target_dpi,token)
 
