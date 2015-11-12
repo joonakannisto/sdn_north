@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import json
 import requests
 login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
