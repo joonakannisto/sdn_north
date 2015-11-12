@@ -18,8 +18,6 @@ token = actions.get_token(login)
 
 uusmac="66:66:66:66:66:66"
 
-templateflow=json.loads(template)
-
 def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     template ="""{"flow": {
     "cookie": "0x2342058",
@@ -29,24 +27,24 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     "hard_timeout": 300,
     "match": [],
     "instructions": []}}"""
-    startdpid=dpid_from_ip(ip,token)
+    startdpid=actions.dpid_from_ip(ip,token)
 
     forward_path = {'path':{'links' : []}}
     if (startdpid !=target_sw):
         forward_path=json.loads(get_forward_path(target_dpid,monitor_dpid,token))
 
-    flowit=get_flows(startdpid,token)
+    flowit=action.get_flows(startdpid,token)
     # This is searching only with the source address, TODO: toggle which flow is
     # hairpinned
-    oldflow=flowsforip(flowit,ip)
-    origsrc=ether_from_ip(ip,token)
+    oldflow=actions.flowsforip(flowit,ip)
+    origsrc=actions.ether_from_ip(ip,token)
     firstaction = [{'set_field' : {'eth_src' : rewsrc}},{'output' : target_port_in}]
     # we are in the target switch
     #if forwardpath["path"]["links"]
     #    firstaction[0]["output"]=target_port_in
     templateflow.append({'apply_actions':firstaction})
     firstelement=True
-    previous=find_inport(flowit,ip)
+    previous=actions.find_inport(flowit,ip)
     firstport=previous
     for link in forward_path["path"]["links"]:
         loopflow = templateflow
@@ -62,7 +60,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
             firstaction[1]={'output': int(link["src_port"])}
             loopflow["flow"]["instructions"][0]["apply_actions"]=firstaction
             firstelement=False
-        addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
+        actions.addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
         #lets save the destination port in the next switch
         previous=int(link["dst_port"])
 
@@ -74,7 +72,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
 
     needleaction=[{'output' : target_port_in}]
     needleflow["flow"]["instructions"].append({'apply_actions':needleaction})
-    addjsonflow(json.dumps(needleflow),target_sw,token)
+    actions.addjsonflow(json.dumps(needleflow),target_sw,token)
 
 
     # we could use reversed(forwardpath), but dunno, maybe is asymmetric, lol
@@ -94,7 +92,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         loopflow["flow"]["match"]=match
         loopaction={'output' : int(link["src_port"])}
         loopflow["flow"]["instructions"][0]["apply_actions"]=loopaction
-        addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
+        actions.addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
         # lets save the destination port in the next switch
         previous=int(link["dst_port"])
 
@@ -123,7 +121,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         flow["match"]=match
 
         loopflow={'flow': flow}
-        addjsonflow(json.dumps(loopflow),startdpid,token)
+        actions.addjsonflow(json.dumps(loopflow),startdpid,token)
 
     # does not seem to support more than one action
 
