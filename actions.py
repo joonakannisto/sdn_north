@@ -66,7 +66,7 @@ def ether_from_ip(ip,token):
 
 
 def find_inport(flowit,ip):
-flowsj = json.loads(flowit)
+    flowsj = json.loads(flowit)
     for flowentry in flowsj["flows"]:
         if 'match' in flowentry:
             for rule in flowentry["match"]:
@@ -97,4 +97,3 @@ def addjsonflow(flow,dst_dpid,token):
     req = requests.post(host+'/sdn/v2.0/of/datapaths/'+dst_dpid+'/flows', headers=qheader(token), data=flow, verify='sdncertti')
     req.raise_for_status()
     return req
-    
