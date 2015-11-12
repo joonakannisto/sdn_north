@@ -103,8 +103,8 @@ def get_forward_path(src_dpid,dst_dpid,token):
     req = requests.get(host+'/sdn/v2.0/net/paths/forward?src_dpid='+src_dpid+'&dst_dpid='+dst_dpid+'', headers=qheader(token), verify='sdncertti')
     #req.raise_for_status()
     if req.status_code != 200:
-        print src_dpid
-        print dst_dpid
+        print 'src_dpid'+src_dpid
+        print 'destinaition'+dst_dpid
         print req.text
     return req.text
 
