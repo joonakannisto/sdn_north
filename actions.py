@@ -70,10 +70,11 @@ def find_inport(flowit,ip):
     for flowentry in flowsj["flows"]:
         if 'match' in flowentry:
             for rule in flowentry["match"]:
-                if(rule["ipv4_src"]==ip):
-                    for port_rule in flowentry["match"]:
-                        if 'port' in port_rule:
-                            return port_rule["port"]
+                if 'ipv4_src' in rule:
+                    if(rule["ipv4_src"]==ip):
+                        for port_rule in flowentry["match"]:
+                            if 'port' in port_rule:
+                                return port_rule["port"]
 
 def flowsforip(flowit,ip):
     flowtemp=json.loads(flowit)
