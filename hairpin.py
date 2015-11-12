@@ -120,7 +120,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
             pass
         # don't give a f for errors :D fuckerrors function would be nicer?
         flow["match"]=match
-        flow["instructions"]["apply_actions"].append({'set_field' : {'eth_src' : origsrc}})
+        flow["instructions"][0]["apply_actions"].append({'set_field' : {'eth_src' : origsrc}})
         loopflow={'flow': flow}
         print json.dumps(loopflow)
         actions.addjsonflow(json.dumps(loopflow),startdpid,token)
