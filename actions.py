@@ -72,7 +72,7 @@ def find_inport(flowit,ip):
             for rule in flowentry["match"]:
                 if 'ipv4_src' in rule:
                     if(rule["ipv4_src"]==ip):
-                        for inportrule in flowentry["match"]
+                        for inportrule in flowentry["match"]:
                             if 'inport' in inportrule:
                                 print "returning"
                                 return inportrule["inport"]
