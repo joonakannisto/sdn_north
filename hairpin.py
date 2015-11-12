@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import json
 import actions
-import hmac
+
 
 kohde= "130.230.115.233"
 monitor_dpid="00:02:3c:a8:2a:47:d9:80"
@@ -10,8 +10,6 @@ monitor_port ="23"
 
 
 token = get_token(login)
-
-target_dpid=dpid_from_ip(kohde,token)
 
 
 # Aseta flowt, eli korvaa alkuperäinen kohdeportti forward path ekalla ja toisessa
