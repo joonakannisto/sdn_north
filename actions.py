@@ -82,7 +82,7 @@ def flowsforip(flowit,ip):
         if 'match' in flowentry:
             for rule in flowentry["match"]:
                 if 'ipv4_src' in rule:
-                    if(rule["ipv4_src"]==kohde):
+                    if(rule["ipv4_src"]==ip):
                         oldflow.append(flowentry)
                         break
     return oldflow
