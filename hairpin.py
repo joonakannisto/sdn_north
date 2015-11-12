@@ -18,6 +18,8 @@ token = actions.get_token(login)
 
 uusmac="66:66:66:66:66:66"
 
+hairpin(kohde,monitor_dpid,monitor_port,15,uusmac,token)
+
 def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     template ="""{"flow": {
     "cookie": "0x2342058",
