@@ -60,7 +60,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
             firstaction[1]={'output': int(link["src_port"])}
             loopflow["flow"]["instructions"][0]["apply_actions"]=firstaction
             firstelement=False
-        print json.dumps(loopflow)+link["src_dpid"]
+
         actions.addjsonflow(json.dumps(loopflow),link["src_dpid"],token)
         #lets save the destination port in the next switch
         previous=int(link["dst_port"])
@@ -78,8 +78,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
 
     # we could use reversed(forwardpath), but dunno, maybe is asymmetric, lol
     forward_path = {'path':{'links' : []}}
-    print 'target'+target_sw
-    print 'start'+startdpid
+
     if (startdpid != target_sw):
         forward_path=json.loads(actions.get_forward_path(target_sw,startdpid,token))
     firstelement=True
@@ -125,7 +124,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         flow["match"]=match
         flow["instructions"][0]["apply_actions"].append({'set_field' : {'eth_src' : origsrc}})
         loopflow={'flow': flow}
-        print json.dumps(loopflow)
+
         actions.addjsonflow(json.dumps(loopflow),startdpid,token)
 
     # does not seem to support more than one action
