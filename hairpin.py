@@ -9,7 +9,7 @@ monitor_dpid="00:02:3c:a8:2a:47:d9:80"
 monitor_port ="23"
 
 template ="""{"flow": {
-"cookie": "0x1751985",
+"cookie": "0x2342058",
 "table_id": 100,
 "priority": 30000,
 "idle_timeout": 300,
@@ -41,6 +41,8 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         forward_path=json.loads(get_forward_path(target_dpid,monitor_dpid,token))
 
     flowit=get_flows(startdpid,token)
+    # This is searching only with the source address, TODO: toggle which flow is
+    # hairpinned
     oldflow=flowsforip(flowit,ip)
     origsrc=ether_from_ip(ip,token)
     firstaction = [{'set_field' : {'eth_src' : rewsrc}},{'output' : target_port_in}]
@@ -101,25 +103,19 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         # lets save the destination port in the next switch
         previous=int(link["dst_port"])
 
-    loopflow["flow"]["match"][1]["port"]=target_port_out
-        match[0]["inport"]=int(link["dst_port"])
-        loopflow["instructions"][0]["apply_actions"]
-    newaction[1]["output"] =int(forward_path["path"]["links"][0]["src_port"])
-    templateflow["flow"]["instructions"][0].append('apply_actions':[])
-    newaction[2]["output"] = newflow["instructions"][0]["apply_actions"][0]
+    match = [{'eth_src' : rewsrc }, {'inport' : previous}]
+    lastaction = [{'set_field' : {'eth_src' : origsrc}},{'output' : target_port_in}]
+    for flow in oldflow:
+        flow["priority"]=30000
+        flow["cookie"]="0x2342058"
+        del flow["duration_sec"]
+        del flow["duration_nsec"]
+        del flow["packet_count"]
+        del flow["flow_mod_flags"]
+        loopflow={'flow': flow}
+        addjsonflow(json.dumps(loopflow),startdpid,token)
 
     # does not seem to support more than one action
-newflow["instructions"][0]["apply_actions"]=newaction
-
-flowtemp = json.loads(template)
-flowtemp["flow"]["match"][0]["ipv4_src"]=kohde
-
-newinstruction = json.loads('{"apply_actions": [{"set_field": {"eth_src":"'+rewsrc+'"}},{"output":23},{"output":42}]}')
-
-
-flowtemp["flow"]["instructions"][0]=newinstruction
-
-print json.dumps(flowtemp, sort_keys=True,indent=4)
 
 #print addjsonflow(json.dumps(flowtemp),target_dpi,token)
 
