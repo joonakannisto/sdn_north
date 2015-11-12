@@ -30,7 +30,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
 
     forward_path = {'path':{'links' : []}}
     if (startdpid !=target_sw):
-        forward_path=json.loads(actions.get_forward_path(target_dpid,monitor_dpid,token))
+        forward_path=json.loads(actions.get_forward_path(target_sw,monitor_dpid,token))
 
     flowit=action.get_flows(startdpid,token)
     # This is searching only with the source address, TODO: toggle which flow is
@@ -77,7 +77,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     # we could use reversed(forwardpath), but dunno, maybe is asymmetric, lol
     forward_path = {'path':{'links' : []}}
     if (startdpid !=target_sw):
-        forward_path=json.loads(get_forward_path(monitor_dpid,target_dpid,token))
+        forward_path=json.loads(actions.get_forward_path(monitor_dpid,target_dpid,token))
     firstelement=True
     # In addition, not so stupid person would have done this for both directions at once
     for link in forward_path["path"]["links"]:
