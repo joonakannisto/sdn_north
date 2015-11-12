@@ -127,10 +127,30 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
 
         actions.addjsonflow(json.dumps(loopflow),startdpid,token)
 
-    # does not seem to support more than one action
-uusmac="66:66:66:66:66:66"
 
-hairpin(kohde,monitor_dpid,monitor_port,15,uusmac,token)
+def main(argv):
+    # my code here
+    uusmac="66:66:66:66:66:66"
+    monitor_out=21
+    try:
+        opts, args = getopt.getopt(argv, "hi:d:p1:p2:", ["help", "ip=","destdpid=","port1=","port2="])
+    except getopt.GetoptError:
+        print "Give target -i target"
+        pass
+    for opt, arg in opts:
+        if opt in ("-i","--ip"):
+            kohde=arg
+        if opt in ("-d","--destdpid"):
+            monitor_dpid=arg
+        if opt in ("-p1","--port1"):
+            monitor_port=arg
+        if opt in ("-p2","--port2"):
+            monitor_out=arg
+    hairpin(kohde,monitor_dpid,monitor_port,monitor_out,uusmac,token)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
+    # does not seem to support more than one action
 
 #print addjsonflow(json.dumps(flowtemp),target_dpi,token)
 
