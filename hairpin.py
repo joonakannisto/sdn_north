@@ -9,7 +9,7 @@ monitor_dpid="00:02:3c:a8:2a:47:d9:80"
 monitor_port ="23"
 
 login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
-token = get_token(login)
+token = actions.get_token(login)
 
 
 # Aseta flowt, eli korvaa alkuperäinen kohdeportti forward path ekalla ja toisessa
