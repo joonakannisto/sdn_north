@@ -55,7 +55,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
             loopflow["flow"]["instructions"][0]["apply_actions"]=loopaction
         else :
             #could match here with ether, but what if many ip for one l2?
-            match = [{'ipv4_src' : ip }, {'in_port' : previous}]
+            match = [{'in_port' : previous}, {'eth_type':'ipv4'},{'ipv4_src' : ip }]
             loopflow["flow"]["match"]=match
             firstaction[1]={'output': int(link["src_port"])}
             loopflow["flow"]["instructions"][0]["apply_actions"]=firstaction
