@@ -94,6 +94,6 @@ def get_forward_path(src_dpid,dst_dpid,token):
     return req.text
 
 def addjsonflow(flow,dst_dpid,token):
-    #req = requests.post(host+'/sdn/v2.0/of/datapaths/'+dst_dpid+'/flows', headers=qheader(token), data=flow, verify='sdncertti')
+    req = requests.post(host+'/sdn/v2.0/of/datapaths/'+dst_dpid+'/flows', headers=qheader(token), data=flow, verify='sdncertti')
     req.raise_for_status(flow)
     return req
