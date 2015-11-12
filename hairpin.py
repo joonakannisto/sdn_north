@@ -50,12 +50,12 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         loopflow = templateflow
         if not firstelement:
             loopflow["flow"]["match"].append({'eth_src': rewsrc})
-            loopflow["flow"]["match"].append({'inport': previous})
+            loopflow["flow"]["match"].append({'in_port': previous})
             loopaction={'output' : int(link["src_port"])}
             loopflow["flow"]["instructions"][0]["apply_actions"]=loopaction
         else :
             #could match here with ether, but what if many ip for one l2?
-            match = [{'ipv4_src' : ip }, {'inport' : previous}]
+            match = [{'ipv4_src' : ip }, {'in_port' : previous}]
             loopflow["flow"]["match"]=match
             firstaction[1]={'output': int(link["src_port"])}
             loopflow["flow"]["instructions"][0]["apply_actions"]=firstaction
@@ -68,7 +68,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     needleflow = templateflow
 
     needleflow["flow"]["match"].append({'eth_src': rewsrc})
-    needleflow["flow"]["match"].append({'inport': previous})
+    needleflow["flow"]["match"].append({'in_port': previous})
 
     needleaction=[{'output' : target_port_in}]
     needleflow["flow"]["instructions"][0]["apply_actions"]=needleaction
@@ -84,9 +84,9 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     for link in forward_path["path"]["links"]:
         loopflow = templateflow
         if not firstelement:
-            match = [{'eth_src' : rewsrc }, {'inport' : previous}]
+            match = [{'eth_src' : rewsrc }, {'in_port' : previous}]
         else :
-            match = [{'eth_src' : rewsrc }, {'inport' : target_port_out}]
+            match = [{'eth_src' : rewsrc }, {'in_port' : target_port_out}]
             firstelement=False
 
         loopflow["flow"]["match"]=match
@@ -96,7 +96,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         # lets save the destination port in the next switch
         previous=int(link["dst_port"])
 
-    match = [{'eth_src' : rewsrc }, {'inport' : previous}]
+    match = [{'eth_src' : rewsrc }, {'in_port' : previous}]
     lastaction = [{'set_field' : {'eth_src' : origsrc}},{'output' : firstport}]
     for flow in oldflow:
         flow["priority"]=30000
