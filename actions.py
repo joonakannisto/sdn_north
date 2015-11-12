@@ -73,16 +73,16 @@ def find_inport(flowit,ip):
                             return port_rule["port"]
 
 def flowsforip(flowit,ip):
-flowtemp=json.loads(flowit)
-oldflow=[]
-for flowentry in flowtemp["flows"]:
-    if 'match' in flowentry:
-        for rule in flowentry["match"]:
-            if 'ipv4_src' in rule:
-                if(rule["ipv4_src"]==kohde):
-                    oldflow.append(flowentry)
-                    break
-return oldflow
+    flowtemp=json.loads(flowit)
+    oldflow=[]
+    for flowentry in flowtemp["flows"]:
+        if 'match' in flowentry:
+            for rule in flowentry["match"]:
+                if 'ipv4_src' in rule:
+                    if(rule["ipv4_src"]==kohde):
+                        oldflow.append(flowentry)
+                        break
+    return oldflow
 
 def get_forward_path(src_dpid,dst_dpid,token):
     req = requests.get(host+'/sdn/v2.0/net/paths/forward?src_dpid='+src_dpid+'&dst_dpid='+dst_dpid+'', headers=qheader(token), verify='sdncertti')
