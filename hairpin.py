@@ -41,6 +41,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     # we are in the target switch
     #if forwardpath["path"]["links"]
     #    firstaction[0]["output"]=target_port_in
+    templateflow=json.loads(template)
     templateflow.append({'apply_actions':firstaction})
     firstelement=True
     previous=actions.find_inport(flowit,ip)
