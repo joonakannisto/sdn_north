@@ -67,7 +67,7 @@ def ether_from_ip(ip,token):
 
 def find_inport(flowit,ip):
     flowsj = json.loads(flowit)
-    for flowentry in flowjs["flows"]:
+    for flowentry in flowsj["flows"]:
         if 'match' in flowentry:
             for rule in flowentry["match"]:
                 if(rule["ipv4_src"]==ip):
