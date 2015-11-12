@@ -32,7 +32,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     if (startdpid !=target_sw):
         forward_path=json.loads(actions.get_forward_path(startdpid,target_sw,token))
 
-    flowit=action.get_flows(startdpid,token)
+    flowit=actions.get_flows(startdpid,token)
     # This is searching only with the source address, TODO: toggle which flow is
     # hairpinned
     oldflow=actions.flowsforip(flowit,ip)
