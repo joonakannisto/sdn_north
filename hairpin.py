@@ -72,7 +72,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
 
     needleaction=[{'output' : target_port_in}]
     needleflow["flow"]["instructions"][0]["apply_actions"]=needleaction
-    print json.dumps(needleflow)
+    print json.dumps(needleflow)+"hello"
     #actions.addjsonflow(json.dumps(needleflow),target_sw,token)
 
 
