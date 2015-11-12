@@ -66,14 +66,14 @@ def ether_from_ip(ip,token):
 
 
 def find_inport(flowit,ip):
-    flowsj = json.loads(flowit)
+flowsj = json.loads(flowit)
     for flowentry in flowsj["flows"]:
         if 'match' in flowentry:
             for rule in flowentry["match"]:
                 if 'ipv4_src' in rule:
                     if(rule["ipv4_src"]==ip):
                         for port_rule in flowentry["match"]:
-                            if 'port' in port_rule:
+                            if 'inport' in port_rule:
                                 return port_rule["port"]
 
 def flowsforip(flowit,ip):
@@ -94,7 +94,7 @@ def get_forward_path(src_dpid,dst_dpid,token):
     return req.text
 
 def addjsonflow(flow,dst_dpid,token):
-    #req = requests.post(host+'/sdn/v2.0/of/datapaths/'+dst_dpid+'/flows', headers=qheader(token), data=flow, verify='sdncertti')
-    #req.raise_for_status()
-    #return req
-    print flow
+    req = requests.post(host+'/sdn/v2.0/of/datapaths/'+dst_dpid+'/flows', headers=qheader(token), data=flow, verify='sdncertti')
+    req.raise_for_status()
+    return req
+    
