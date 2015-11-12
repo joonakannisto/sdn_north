@@ -68,10 +68,10 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     needleflow = templateflow
 
     needleflow["flow"]["match"].append({'eth_src': rewsrc})
-    needleflow["flow"]["match"].append({'port': previous})
+    needleflow["flow"]["match"].append({'inport': previous})
 
     needleaction=[{'output' : target_port_in}]
-    needleflow["flow"]["instructions"].append({'apply_actions':needleaction})
+    needleflow["flow"]["instructions"][0]["apply_actions"]=needleaction
     actions.addjsonflow(json.dumps(needleflow),target_sw,token)
 
 
