@@ -101,7 +101,9 @@ def flowsforip(flowit,ip):
 
 def get_forward_path(src_dpid,dst_dpid,token):
     req = requests.get(host+'/sdn/v2.0/net/paths/forward?src_dpid='+src_dpid+'&dst_dpid='+dst_dpid+'', headers=qheader(token), verify='sdncertti')
-    req.raise_for_status()
+    #req.raise_for_status()
+    if response.status_code != 503:
+        raise (req.text)
     return req.text
 
 def addjsonflow(flow,dst_dpid,token):

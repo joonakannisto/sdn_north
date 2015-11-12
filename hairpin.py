@@ -78,7 +78,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
 
     # we could use reversed(forwardpath), but dunno, maybe is asymmetric, lol
     forward_path = {'path':{'links' : []}}
-    if (startdpid !=target_sw):
+    if (startdpid != target_sw):
         forward_path=json.loads(actions.get_forward_path(target_sw,startdpid,token))
     firstelement=True
     # In addition, not so stupid person would have done this for both directions at once
