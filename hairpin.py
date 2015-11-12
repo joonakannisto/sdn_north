@@ -72,7 +72,8 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
 
     needleaction=[{'output' : target_port_in}]
     needleflow["flow"]["instructions"][0]["apply_actions"]=needleaction
-    actions.addjsonflow(json.dumps(needleflow),target_sw,token)
+    print json.dumps(needleflow)
+    #actions.addjsonflow(json.dumps(needleflow),target_sw,token)
 
 
     # we could use reversed(forwardpath), but dunno, maybe is asymmetric, lol
