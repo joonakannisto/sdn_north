@@ -5,12 +5,6 @@ import actions
 import sys
 import getopt
 
-kohde= "130.230.115.233"
-monitor_dpid="00:02:3c:a8:2a:47:d9:80"
-monitor_port ="23"
-
-login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
-token = actions.get_token(login)
 
 
 # Aseta flowt, eli korvaa alkuperäinen kohdeportti forward path ekalla ja toisessa
@@ -130,6 +124,13 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
 
 
 def main(argv):
+    kohde= "130.230.115.233"
+    monitor_dpid="00:02:3c:a8:2a:47:d9:80"
+    monitor_port =23
+
+    login={"login":{"user":"sdn","password":"skyline","domain":"sdn"}}
+    token = actions.get_token(login)
+
     # my code here
     uusmac="66:66:66:66:66:66"
     monitor_out=21
