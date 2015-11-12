@@ -8,24 +8,12 @@ kohde= "130.230.115.233"
 monitor_dpid="00:02:3c:a8:2a:47:d9:80"
 monitor_port ="23"
 
-template ="""{"flow": {
-"cookie": "0x2342058",
-"table_id": 100,
-"priority": 30000,
-"idle_timeout": 300,
-"hard_timeout": 300,
-"match": [],
-"instructions": []}}"""
+
 token = get_token(login)
 
 target_dpid=dpid_from_ip(kohde,token)
 
-# we don't want to raise any errors here
-if (target_dpid !=monitor_dpid):
-    polku=get_forward_path(target_dpid,monitor_dpid,token)
-else:
-    polku = '{"path": {"links" : []}}'
-forward_path=json.loads(polku)
+
 # Aseta flowt, eli korvaa alkuperäinen kohdeportti forward path ekalla ja toisessa
 # dpid:ssä aseta sisääntuleva liikenne portissa x
 
@@ -33,7 +21,16 @@ forward_path=json.loads(polku)
 uusmac="66:66:66:66:66:66"
 
 templateflow=json.loads(template)
+
 def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
+    template ="""{"flow": {
+    "cookie": "0x2342058",
+    "table_id": 100,
+    "priority": 30000,
+    "idle_timeout": 300,
+    "hard_timeout": 300,
+    "match": [],
+    "instructions": []}}"""
     startdpid=dpid_from_ip(ip,token)
 
     forward_path = {'path':{'links' : []}}
@@ -49,15 +46,15 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     # we are in the target switch
     #if forwardpath["path"]["links"]
     #    firstaction[0]["output"]=target_port_in
-    templateflow.append('apply_actions':firstaction)
+    templateflow.append({'apply_actions':firstaction})
     firstelement=True
     previous=find_inport(flowit,ip)
 
     for link in forward_path["path"]["links"]:
         loopflow = templateflow
         if not firstelement:
-            loopflow["flow"]["match"].append{'eth_src': rewsrc}
-            loopflow["flow"]["match"].append{'inport': previous}
+            loopflow["flow"]["match"].append({'eth_src': rewsrc})
+            loopflow["flow"]["match"].append({'inport': previous})
             loopaction={'output' : int(link["src_port"])}
             loopflow["flow"]["instructions"][0]["apply_actions"]=loopaction
         else :
@@ -74,8 +71,8 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     # we are now in the target dpi
     needleflow = templateflow
 
-    needleflow["flow"]["match"].append{'eth_src': rewsrc}
-    needleflow["flow"]["match"].append{'port': previous}
+    needleflow["flow"]["match"].append({'eth_src': rewsrc})
+    needleflow["flow"]["match"].append({'port': previous})
 
     needleaction=[{'output' : target_port_in}]
     needleflow["flow"]["instructions"].append({'apply_actions':needleaction})
