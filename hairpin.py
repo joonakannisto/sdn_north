@@ -47,7 +47,7 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
     templateflow.append({'apply_actions':firstaction})
     firstelement=True
     previous=find_inport(flowit,ip)
-
+    firstport=previous
     for link in forward_path["path"]["links"]:
         loopflow = templateflow
         if not firstelement:
@@ -99,18 +99,29 @@ def hairpin(ip,target_sw,target_port_in,target_port_out,rewsrc,token):
         previous=int(link["dst_port"])
 
     match = [{'eth_src' : rewsrc }, {'inport' : previous}]
-    lastaction = [{'set_field' : {'eth_src' : origsrc}},{'output' : target_port_in}]
+    lastaction = [{'set_field' : {'eth_src' : origsrc}},{'output' : firstport}]
     for flow in oldflow:
         flow["priority"]=30000
         flow["cookie"]="0x2342058"
         try:
             del flow["duration_sec"]
-            del flow["duration_nsec"]
-            del flow["packet_count"]
-            del flow["flow_mod_flags"]
-            # don't give a f for errors :D
         except KeyError:
             pass
+        try:
+            del flow["duration_nsec"]
+        except KeyError:
+            pass
+        try:
+            del flow["packet_count"]
+        except KeyError:
+            pass
+        try:
+            del flow["flow_mod_flags"]
+        except KeyError:
+            pass
+        # don't give a f for errors :D fuckerrors function would be nicer?
+        flow["match"]=match
+
         loopflow={'flow': flow}
         addjsonflow(json.dumps(loopflow),startdpid,token)
 
